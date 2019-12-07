@@ -5,6 +5,9 @@ env:
 - URL=https://developer.salesforce.com/media/salesforce-cli/sfdx-linux-amd64.tar.xz
 # safelist
 branches:
+  except:
+  - master
+  - /^branch-.*$/
   only:
   - develop
 before_install:
