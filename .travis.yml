@@ -3,10 +3,6 @@ os: trusty
 cache: false
 env:
 - URL=https://developer.salesforce.com/media/salesforce-cli/sfdx-linux-amd64.tar.xz
-# safelist
-branches:
-  only:
-  - develop
 before_install:
 - openssl aes-256-cbc -K $encrypted_f3fc9730da07_key -iv $encrypted_f3fc9730da07_iv
   -in assets/server.key.enc -out assets/server.key -d
@@ -30,4 +26,10 @@ script:
 - sfdx force:source:push -u ciorg
 - sfdx force:apex:test:run -u ciorg --wait 10
 - sfdx force:org:delete -u ciorg -p
-
+- sfdx force:auth:jwt:grant --clientid $CONSUMERKEY_TEST --jwtkeyfile assets/server.key
+  --username $USERNAME_TEST -a TestOrg
+- sfdx force:source:convert --rootdir force-app --outputdir tmp_convert
+- zip -r build.zip tmp_convert
+- rm -r tmp_convert
+- sfdx force:mdapi:deploy --zipfile build.zip --targetusername TestOrg \
+--testlevel RunLocalTests
