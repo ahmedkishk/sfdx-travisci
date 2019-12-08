@@ -1,5 +1,5 @@
 /*
-* To do: add documentation for myclass
+* To do: add documentation for myclass.
 */
 public with sharing class myclass {
 	public myclass() {
